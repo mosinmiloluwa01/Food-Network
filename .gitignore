@@ -1,0 +1,11 @@
+# Dependency directory
+node_modules
+
+# Logs
+.DS_Store
+
+#environmental variables
+*.env
+
+#code coverage
+coverage
