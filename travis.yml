@@ -1,0 +1,18 @@
+language: node_js
+
+node_js:
+  - 10.15.3
+
+env:
+  - NODE_ENV=test
+
+services:
+  - sqlite3
+
+install:
+  - npm install
+
+script:
+  - npm test
+
+
