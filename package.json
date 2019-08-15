@@ -9,12 +9,18 @@
     ],
     "verbose": true,
     "moduleNameMapper": {
-      "^<helpers>/(.*)$": "<rootDir>/server/helpers/$1"
+      "^<helpers>/(.*)$": "<rootDir>/server/helpers/$1",
+      "^<fixtures>/(.*)$": "<rootDir>/server/fixtures/$1",
+      "^<controllers>/(.*)$": "<rootDir>/server/controllers/$1",
+      "^<emailTemplates>/(.*)$": "<rootDir>/server/emailTemplates/$1",
+      "^<middlewares>/(.*)$": "<rootDir>/server/middlewares/$1"
     }
   },
   "scripts": {
+    "pretest": "rm -rf ./database.sqlite && NODE_ENV=test npm run refreshdb",
+    "refreshdb": "NODE_ENV=test sequelize db:migrate:undo:all && sequelize db:migrate",
     "test": "NODE_ENV=test jest --coverage",
-    "start-dev": "nodemon ./server/app.js --exec babel-node"
+    "start-dev": "nodemon ./server/index.js --exec babel-node"
   },
   "repository": {
     "type": "git",
@@ -32,7 +38,7 @@
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/register": "^7.5.5",
-    "D": "^1.0.0",
+    "@sendgrid/mail": "^6.4.0",
     "babel-plugin-module-resolver": "^3.2.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -45,6 +51,7 @@
     "express": "^4.17.1",
     "jest": "^24.8.0",
     "jsonwebtoken": "^8.5.1",
+    "mailgen": "^2.0.8",
     "nodemon": "^1.19.1",
     "pg": "^7.12.0",
     "pg-hstore": "^2.3.3",
@@ -52,7 +59,9 @@
     "prettier-eslint-cli": "^5.0.0",
     "sequelize": "^5.12.3",
     "sequelize-cli": "^5.5.0",
+    "sinon": "^7.4.1",
     "sqlite3": "^4.0.9",
+    "supertest": "^4.0.2",
     "uuid": "^3.3.2",
     "validatorjs": "^3.15.1"
   }

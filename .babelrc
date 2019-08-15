@@ -13,8 +13,15 @@
       {
         "root": ["./server"],
         "alias": {
+          "<server>": "./server",
           "<test>": "./server/tests",
           "<helpers>": "./server/helpers",
+          "<models>": "./server/models",
+          "<fixtures>": "./server/fixtures",
+          "<controllers>": "./server/controllers",
+          "<validations>": "./server/validations",
+          "<emailTemplates>": "./server/emailTemplates",
+          "<middlewares>": "./server/middlewares",
         }
       }
     ]

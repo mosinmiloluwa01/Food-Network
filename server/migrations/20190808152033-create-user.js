@@ -24,6 +24,14 @@ const user = {
       type: Sequelize.STRING,
       allowNull: false
     },
+    address: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    phone: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
     isAdmin: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
@@ -32,9 +40,17 @@ const user = {
       type: Sequelize.BOOLEAN,
       defaultValue: false
     },
-    profileImg: {
+    profileImage: {
       type: Sequelize.STRING
     },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    }
   }),
   down: queryInterface => queryInterface.dropTable('Users')
 };
