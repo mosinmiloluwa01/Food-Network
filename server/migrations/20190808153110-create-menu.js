@@ -20,6 +20,14 @@ const menu = {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    }
   }),
   down: queryInterface => queryInterface.dropTable('Menus')
 };
