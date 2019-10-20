@@ -6,7 +6,7 @@ import {
   getData, inputObject, reqObject, resObject
 } from '<fixtures>/data';
 import { signup, verifyAccount, login } from '<controllers>/authentication';
-import { tokenGenerator, cookieGenerator, displayMessage } from '<helpers>/utils';
+import { tokenGenerator, displayMessage } from '<helpers>/utils';
 
 const { User, sequelize } = model;
 
@@ -18,7 +18,6 @@ let user, token;
 const { TOKEN_EXPIRY_DATE, SECRET } = process.env;
 
 const utils = {
-  cookieGenerator,
   displayMessage,
 };
 
@@ -37,7 +36,6 @@ beforeAll(async () => {
 
   jest.spyOn(sgMail, 'setApiKey').mockReturnValue();
   jest.spyOn(sgMail, 'send').mockResolvedValue({});
-  jest.spyOn(utils, 'cookieGenerator').mockReturnValue();
   jest.spyOn(utils, 'displayMessage').mockReturnValue();
 });
 
@@ -55,10 +53,10 @@ describe('signup validations', () => {
       .end((err, res) => {
         expect(res.status).toBe(400);
         expect(res.body).toHaveProperty('message', 'validation error occured');
-        expect(res.body.error.firstName[0]).toEqual('The firstName field is required.');
-        expect(res.body.error.lastName[0]).toEqual('The lastName field is required.');
-        expect(res.body.error.email[0]).toEqual('The email field is required.');
-        expect(res.body.error.password[0]).toEqual('The password field is required.');
+        expect(res.body.errors.firstName[0]).toEqual('The firstName field is required.');
+        expect(res.body.errors.lastName[0]).toEqual('The lastName field is required.');
+        expect(res.body.errors.email[0]).toEqual('The email field is required.');
+        expect(res.body.errors.password[0]).toEqual('The password field is required.');
         done();
       });
   });
@@ -72,9 +70,9 @@ describe('signup validations', () => {
       .end((err, res) => {
         expect(res.status).toBe(400);
         expect(res.body).toHaveProperty('message', 'validation error occured');
-        expect(res.body.error.firstName[0]).toEqual('The firstName field must contain only alphabetic characters.');
-        expect(res.body.error.lastName[0]).toEqual('The lastName field must contain only alphabetic characters.');
-        expect(res.body.error.email[0]).toEqual('The email format is invalid.');
+        expect(res.body.errors.firstName[0]).toEqual('The firstName field must contain only alphabetic characters.');
+        expect(res.body.errors.lastName[0]).toEqual('The lastName field must contain only alphabetic characters.');
+        expect(res.body.errors.email[0]).toEqual('The email format is invalid.');
         done();
       });
   });
@@ -90,8 +88,8 @@ describe('login validations', () => {
       .end((err, res) => {
         expect(res.status).toBe(400);
         expect(res.body).toHaveProperty('message', 'validation error occured');
-        expect(res.body.error.email[0]).toEqual('The email field is required.');
-        expect(res.body.error.password[0]).toEqual('The password field is required.');
+        expect(res.body.errors.email[0]).toEqual('The email field is required.');
+        expect(res.body.errors.password[0]).toEqual('The password field is required.');
         done();
       });
   });
@@ -103,7 +101,7 @@ describe('login validations', () => {
       .end((err, res) => {
         expect(res.status).toBe(400);
         expect(res.body).toHaveProperty('message', 'validation error occured');
-        expect(res.body.error.email[0]).toEqual('The email format is invalid.');
+        expect(res.body.errors.email[0]).toEqual('The email format is invalid.');
         done();
       });
   });
@@ -118,7 +116,7 @@ describe('verify account controller', () => {
       .end((err, res) => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty('message', 'User email verified successfully');
-        expect(res.body).toHaveProperty('data');
+        expect(res.body).toHaveProperty('isVerified', true);
         done();
       });
   });
@@ -144,7 +142,7 @@ describe('signup', () => {
       .end((err, res) => {
         expect(res.status).toBe(409);
         expect(res.body).toHaveProperty('message', 'email exists');
-        expect(res.body).toHaveProperty('error');
+        expect(res.body).toHaveProperty('status', 'error');
         done();
       });
   });
@@ -170,7 +168,6 @@ describe('login', () => {
       .end((err, res) => {
         expect(res.status).toBe(400);
         expect(res.body).toHaveProperty('message', 'Authentication failed');
-        expect(res.body).toHaveProperty('error');
         done();
       });
   });
@@ -182,7 +179,6 @@ describe('login', () => {
       .end((err, res) => {
         expect(res.status).toBe(400);
         expect(res.body).toHaveProperty('message', 'Authentication failed');
-        expect(res.body).toHaveProperty('error');
         done();
       });
   });
@@ -198,8 +194,8 @@ describe('Authentication Controller Catch Blocks', () => {
 
     expect(resObject.json).toHaveBeenCalledWith({
       status: 'error',
-      message: 'some error',
-      error: null
+      message: 'an error occured',
+      error: 'some error'
     });
   });
 
@@ -212,8 +208,8 @@ describe('Authentication Controller Catch Blocks', () => {
 
     expect(resObject.json).toHaveBeenCalledWith({
       status: 'error',
-      message: 'some error',
-      error: null
+      message: 'an error occured',
+      error: 'some error'
     });
   });
 
@@ -226,8 +222,8 @@ describe('Authentication Controller Catch Blocks', () => {
 
     expect(resObject.json).toHaveBeenCalledWith({
       status: 'error',
-      message: 'some error',
-      error: null
+      message: 'an error occured',
+      error: 'some error'
     });
   });
 });

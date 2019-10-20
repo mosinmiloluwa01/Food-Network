@@ -1,12 +1,6 @@
 
 const menu = (sequelize, DataTypes) => {
   const Menu = sequelize.define('Menu', {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4
-    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -29,12 +23,28 @@ const menu = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isUrl: {
-          msg: 'image must be a url.'
+        notNull: {
+          msg: 'price is required.'
         }
       }
     },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'categoryId is required.'
+        }
+      }
+    }
   }, {});
+  Menu.associate = (models) => {
+    Menu.belongsTo(models.Category, {
+      as: 'category',
+      foreignKey: 'categoryId',
+      onDelete: 'CASCADE',
+    });
+  };
   return Menu;
 };
 

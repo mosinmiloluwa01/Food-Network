@@ -79,13 +79,10 @@ const user = (sequelize, DataTypes) => {
   });
 
   User.associate = (models) => {
-    User.belongsToMany(models.Order, {
-      through: 'cart',
+    User.hasMany(models.Order, {
       as: 'orders',
-      foreignKey: 'orderId',
-      otherKey: 'userId',
+      foreignKey: 'userId',
       onDelete: 'CASCADE',
-      timestamps: false,
     });
   };
   return User;

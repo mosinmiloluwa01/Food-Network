@@ -12,10 +12,6 @@ const order = (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false
       },
-      quantity: {
-        type: DataTypes.ARRAY(DataTypes.INTEGER),
-        allowNull: false,
-      },
       userId: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -28,11 +24,9 @@ const order = (sequelize, DataTypes) => {
     {}
   );
   Order.associate = (models) => {
-    Order.belongsToMany(models.User, {
-      through: 'cart',
+    Order.belongsTo(models.User, {
       as: 'owner',
       foreignKey: 'userId',
-      otherKey: 'orderId',
       onDelete: 'CASCADE',
     });
   };

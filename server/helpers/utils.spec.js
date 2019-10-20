@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import {
-  hashPassword, trimAndConvertToLowercase, tokenGenerator, cookieGenerator,
+  hashPassword, trimAndConvertToLowercase, tokenGenerator,
 } from '<helpers>/utils';
 import { inputObject, resObject } from '<fixtures>/data';
 
@@ -44,14 +44,5 @@ describe('Token Generator', () => {
     }
 
     expect(typeof token2).toBe('string');
-  });
-});
-
-describe('Cookie Generator', () => {
-  it('should generate cookie with default values', () => {
-    cookieGenerator({ id: '5c1d4726-647e-4f77-a251-10381d3510f3', isVerified: false }, 3600, resObject);
-    cookieGenerator({ id: '5c1d4726-647e-4f77-a251-10381d3510f3', isVerified: false }, undefined, resObject);
-
-    expect(typeof resObject.token).toBe('string');
   });
 });

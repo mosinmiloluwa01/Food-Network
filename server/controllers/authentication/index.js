@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import model from '<models>';
 import {
-  displayMessage, cookieGenerator, sendMail, comparePassword
+  displayMessage, tokenGenerator, sendMail, comparePassword
 } from '<helpers>/utils';
 import generateEmail from '<emailTemplates>/emailVerification';
 
@@ -28,7 +28,7 @@ export const signup = async (req, res) => {
       isVerified: newUser.isVerified
     };
 
-    cookieGenerator(payload, process.env.COOKIE_EXPIRY_DATE, res);
+    const token = tokenGenerator(payload, process.env.TOKEN_EXPIRY_DATE, process.env.SECRET);
 
     const verificationEmail = generateEmail(newUser, req);
 
@@ -40,9 +40,13 @@ export const signup = async (req, res) => {
       verificationEmail
     );
 
-    return displayMessage(res, 200, 'success, please go to your inbox to verify your account', userInfo);
+    userInfo.token = token;
+
+    return displayMessage(res, 200, {
+      message: 'success, please go to your inbox to verify your account', data: userInfo
+    });
   } catch (error) {
-    return displayMessage(res, 500, error.message, null, false);
+    return displayMessage(res, 500, { message: 'an error occured', error: error.message });
   }
 };
 
@@ -54,9 +58,9 @@ export const verifyAccount = async (req, res) => {
 
     const { isVerified } = updatedUser.dataValues;
 
-    return displayMessage(res, 200, 'User email verified successfully', { isVerified });
+    return displayMessage(res, 200, { message: 'User email verified successfully', isVerified });
   } catch (error) {
-    return displayMessage(res, 500, 'an error occured', error, false);
+    return displayMessage(res, 500, { message: 'an error occured', error: error.message });
   }
 };
 
@@ -67,23 +71,25 @@ export const login = async (req, res) => {
     const userData = await User.findOne({ where: { email } });
 
     if (!userData) {
-      return displayMessage(res, 400, 'Authentication failed', null, false);
+      return displayMessage(res, 400, { message: 'Authentication failed' });
     }
     const { password, ...userInfo } = userData.dataValues;
 
 
     if (userData && !comparePassword(userData.password, req.body.password)) {
-      return displayMessage(res, 400, 'Authentication failed', null, false);
+      return displayMessage(res, 400, { message: 'Authentication failed' });
     }
     const payload = {
       id: userData.id,
       isVerified: userData.isVerified
     };
 
-    cookieGenerator(payload, process.env.COOKIE_EXPIRY_DATE, res);
+    const token = tokenGenerator(payload, process.env.TOKEN_EXPIRY_DATE, process.env.SECRET);
 
-    return displayMessage(res, 200, 'Authentication successful', userInfo);
+    userInfo.token = token;
+
+    return displayMessage(res, 200, { message: 'Authentication successful', data: userInfo });
   } catch (error) {
-    return displayMessage(res, 500, 'server error', error, false);
+    return displayMessage(res, 500, { message: 'an error occured', error: error.message });
   }
 };

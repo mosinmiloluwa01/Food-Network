@@ -23,13 +23,13 @@ export const validateSignupData = async (req, res, next) => {
 
   const validationData = checkValidation(data, rules);
   if (validationData !== true) {
-    return displayMessage(res, 400, 'validation error occured', validationData, false);
+    return displayMessage(res, 400, { message: 'validation error occured', errors: validationData });
   }
 
   const userEmailExist = await User.findOne({ where: { email } });
 
   if (userEmailExist) {
-    return displayMessage(res, 409, 'email exists', null, false);
+    return displayMessage(res, 409, { message: 'email exists' });
   }
 
   req.body = sanitizedData;
@@ -52,7 +52,7 @@ export const validateLoginData = async (req, res, next) => {
 
   const validationData = checkValidation(data, rules);
   if (validationData !== true) {
-    return displayMessage(res, 400, 'validation error occured', validationData, false);
+    return displayMessage(res, 400, { message: 'validation error occured', errors: validationData });
   }
 
   req.body = sanitizedData;

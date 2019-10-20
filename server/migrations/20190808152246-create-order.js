@@ -21,10 +21,6 @@ const order = {
         as: 'userId',
       },
     },
-    quantity: {
-      type: Sequelize.ARRAY(Sequelize.INTEGER),
-      allowNull: false,
-    },
     isCheckedOut: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
