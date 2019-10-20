@@ -38,22 +38,13 @@ export const checkValidation = (data, rules) => {
 /**
  * @param {object} res
  * @param {integer} statusCode
- * @param {string} message
- * @param {object} data
- * @param {boolean} success
+ * @param {object} dataObject
  * @return {object} response
  */
-export const displayMessage = (
-  res, statusCode, message, data, success = true
-) => {
-  const payload = success === true ? 'data' : 'error';
-
-  return res.status(statusCode).json({
-    status: success === true ? 'success' : 'error',
-    message,
-    [payload]: data
-  });
-};
+export const displayMessage = (res, statusCode, dataObject) => res.status(statusCode).json({
+  status: statusCode < 300 ? 'success' : 'error',
+  ...dataObject,
+});
 
 /**
  * @param {object} payload
@@ -66,22 +57,6 @@ export const tokenGenerator = (payload, tokenExpiryDate = '1h', secret = 'secret
   const token = jwt.sign(payload, secret, { expiresIn: tokenExpiryDate });
   return token;
 };
-
-/**
- * @param {object} payload
- * @param {string} cookieExpiryDate
- * @param {object} res
- * @return {string} cookie
- */
-export const cookieGenerator = (payload, cookieExpiryDate = 3.6e6, res) => res.cookie(
-  'access-token',
-  { token: tokenGenerator(payload, process.env.TOKEN_EXPIRY_DATE, process.env.SECRET) },
-  {
-    httpOnly: true,
-    secure: false,
-    maxAge: cookieExpiryDate
-  }
-);
 
 /**
  * @param {string} sendgridApiKey

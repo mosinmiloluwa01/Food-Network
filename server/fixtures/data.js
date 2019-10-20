@@ -11,11 +11,6 @@ export const getData = args => ({
 });
 
 export const resObject = {
-  cookie: (accessToken, tokenObj, options) => {
-    resObject.accessToken = accessToken;
-    resObject.token = tokenObj.token;
-    resObject.options = options;
-  },
   json: jest.fn(),
   status: jest.fn().mockReturnThis(),
 };
