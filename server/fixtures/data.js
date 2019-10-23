@@ -23,3 +23,12 @@ export const reqObject = {
     lastName: 'test',
   }
 };
+
+export const adminUser = {
+  firstName: 'oluwagbohunmi',
+  lastName: 'owoso',
+  email: 'mosinmiloluwa.owoso@gmail.com',
+  password: 'testing123',
+  isAdmin: true,
+  isVerified: true,
+}

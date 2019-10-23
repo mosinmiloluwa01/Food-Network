@@ -13,7 +13,8 @@
       "^<fixtures>/(.*)$": "<rootDir>/server/fixtures/$1",
       "^<controllers>/(.*)$": "<rootDir>/server/controllers/$1",
       "^<emailTemplates>/(.*)$": "<rootDir>/server/emailTemplates/$1",
-      "^<middlewares>/(.*)$": "<rootDir>/server/middlewares/$1"
+      "^<middlewares>/(.*)$": "<rootDir>/server/middlewares/$1",
+      "^<services>/(.*)$": "<rootDir>/server/services/$1"
     }
   },
   "scripts": {

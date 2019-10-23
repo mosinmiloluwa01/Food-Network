@@ -22,6 +22,7 @@
           "<validations>": "./server/validations",
           "<emailTemplates>": "./server/emailTemplates",
           "<middlewares>": "./server/middlewares",
+          "<services>": "./server/services",
         }
       }
     ]
